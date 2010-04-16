@@ -1,7 +1,7 @@
 /************************************************************************************
  sayi-tahnin.cpp - maidis / 2010
 
- Daha önceden Basic'te yazdığım sayı tahmin oyununun C++'laşmış hali :)
+ Daha önce Basic'te yazdığım sayı tahmin oyununun C++'laşmış hali :)
  Ekrandaki sayı silme atraksiyonunu Basic'teki sürümünden aktarmaya çalıştım
  http://anilozbek.blogspot.com/2007/11/basic-ve-gnulinux.html
 
@@ -14,7 +14,8 @@
  http://airamrguez.blogspot.com/2008/02/cmo-implementar-la-funcin-gotoxy-en-c.html
 
  Oyun ne yazık ki platform bağımsız değil, ama biraz kurcalarsanız eminim GNU/Linux
- harici işletim sistemleri üzerinde de çalışacaktır
+ harici işletim sistemleri üzerinde de çalışacaktır, biraz kurcalarsanız demişim
+ de nereden baksanız cygwin, mingw, gettext, ncurses, xterm, terminator filan...
  ************************************************************************************/
 
 
@@ -23,11 +24,10 @@
 // Yorum haline getirebilir ve aldığınız hataların sonucuna bakabilirsiniz :)
 // Kısa kısa yazayım yine de:
 // iostream: cin, cout...
-// iomanip: setw...
-// cstdlib: system, rand, srand...
-
 #include <iostream>
+// iomanip: setw...
 #include <iomanip>
+// cstdlib: system, rand, srand...
 #include <cstdlib>
 // ctime ve string Windows üzerinde gerekli gibi
 // Bir de KDevelop şu an tam anlayamadığım bazı uyarılar veriyor bu ikisi olmayınca
@@ -35,12 +35,19 @@
 #include <ctime>
 #include <string>
 #include <sstream>
+// Aşağıdaki iki başlık sayesinde oyunu ulaslararası pazara açmayı düşünüyorum
+// Olmazsa de gettext'i öğrenmiş olurum
+#include <libintl.h>
+#include <locale.h>
+// Zaman sınırlamalı kullanıcı giriş hedesi için bir başlık daha ekleyelim
+#include <sys/time.h>
 
 // İsim uzayımızı belirtiyoruz std'den başka bir şey kullanmadığımız için
 // herhangi bir karışıklık olmayacaktır, ama yakında düzeltmemiz gerekebilir
 using namespace std;
 
-
+// Bu şablon hedesi ve aşağıdaki inline (satıriçi? kitapta yerel denmiş) fonksiyonu
+// terminalde yer değiştirmek için
 template <class T>inline string ToString(const T& t)
     {
     stringstream ss;
@@ -54,135 +61,201 @@ inline string gotoxy(const int& x,const int& y)
     }
 
 // Oyun başlarken ekrana 1'den 100'e tüm sayıları yazdırmak için
-int sayilariyaz()
+void sayilariyaz()
     {
+    int i;
+
     system("clear");
+    // Ya ben hiçbir ek şey kullanmak istemediğimden ncurses kullanmadım
+    // fakat sen gel gör ki clear komutu ncurses paketinden çıkıyormuş
 
     cout << "         "
-         << "\033[32m...::: Sayı Tahmin Oyunu v0.5 :::...\033[0m"
+         << "\033[32m...::: " << gettext("Number Guess Game") << " v0.5" << " :::...\033[0m"
          << endl;
-
-    int i;
 
     for (i=1; i<=100; i++)
         {
         // Sayıları en düşük değerlikli basamaklarına göre hizalamak için
         cout << setw(5) << i;
-        // Eğer sayı 10'a tam bölünebiliyorsa satır atla
-        if ((i%10) == 0) cout << endl;
+        // Eğer i 10'a tam bölünebiliyorsa satır atla
+        if ((i%10) == 0)
+            cout << endl;
         }
     }
 
 
 // Oyunla ilgili olayların gerçekleştiği yer
-int oynat()
+void oynat()
     {
-    // Zamana göre rasgele sayı üretimi yapmazsak hep aynı sayı tutulur
-    srand(time(0));
-
-    int rasgeleSayi = rand() % 100 + 1; // 1'le 100 arası rasgele sayı üretmek için
-    int tahmin = 0; // kullanıcının tahinlerini tutmak için
-    int deneme = 0; // kullanıcının kaçıncı hakkı olduğunu saymak için
-    int denemeHakki = 7; // kullanıcıya kaç hak verelim şeysi
+    int tahmin = 0;         // Kullanıcının tahminlerini tutmak için
+    int deneme = 0;         // Kullanıcının kaçıncı denemesi olduğunu saymak için
+    int denemeHakki = 7;    // Kullanıcıya kaç deneme hakkı verelim şeysi
+    int can = 3;            // Kullanıcıya bir de can verelim tam olsun
+    int beklemeSuresi = 15; // Kullanıcı kaç saniye içinde giriş yapacak
+    int puan = 0;           // Puansız oyun mu olur hiç
     int sinirNoktasi = 100; // Bilgisiayarın hangi aralıkta sayı tutacağı 1...sinirNoktasi
                             // Bunu değiştirirseniz pek çok şeyi daha değiştirmek zorundasınız ama
 
-    do
-       {
-       // kullanıcının canını sıkalım :)
-       cout << gotoxy(4,60) << "Kalan hakkınız: " << denemeHakki - deneme;
+    // zaman aşımlı kullanıcı girişi için gerekli hedeler
+    fd_set fdset;
+    struct timeval timeout;
+    int  rc;
 
-       // önceki girilen sayıyı ekrandan temizlemek için
-       // kullanıcın on basamaklı bir sayı girmeyi de
-       // deneyebileceğini düşünerek biraz büyük alalım :)
-       cout << gotoxy(15,41) << "          ";
+    do  {
+        srand(time(0)); // Zamana göre rasgele sayı üretimi yapmazsak hep aynı sayı tutulur
+        int rasgeleSayi = rand() % 100 + 1; // 1'le 100 arası rasgele sayı üretmek için
 
-       cout << gotoxy(15,15) << "Tahmininiz nedir (1-" << sinirNoktasi << "): ";
-       cin >> tahmin;
+        do  {
+            cout << gotoxy(2,60) << gettext("Score          : ") << puan;
+            cout << gotoxy(3,60) << gettext("Remaining lives: ") << can;
+            cout << gotoxy(4,60) << gettext("Remaining trys : ") << denemeHakki - deneme;
+
+            cout << gotoxy(15,15) << gettext("What's your guess (1-") << sinirNoktasi << "): ";
+
+            // Bu oyundaki en önemli hede aşağıdaki bir .ike yaramıyormuş gibi görünen satırdır
+            // önemsiz gibi görünüşünün altında ne sırlar gizlidir, olmaması nelere sebeptir
+            // yorumlarsanız görürsünüz, yerini değiştirirseniz görürsünüz
+            // endl sen bizim her şeyimizsin, heydele heydele...
+            cout << endl;
+
+            // Aşağıdakileri şöyle düşünün cin >> timeout(beklemeSuresi) >> tahmin;
+            // Hatta siz öyle düşünmeyin ben gotoxy'deki olayı buna uyarlamaya çalışayım
+            timeout.tv_sec = beklemeSuresi;
+            timeout.tv_usec = 0;
+            FD_ZERO(&fdset);
+
+            FD_SET(0, &fdset);
+
+            rc = select(1, &fdset, NULL, NULL, &timeout);
+            if (FD_ISSET(0, &fdset))
+                {
+                // TODO: harf girildiğinde sapıtıyor, önlem alınca da bir tuhaf oluyor
+                cin >> tahmin;
+                }
+
+            // Her tahminden sonra deneme değişkenini arttırıyoruz
+            // deneme her halükarda artacaktır, bence böyle de olması gerekiyor
+            // kullanıcı daha önceden girdiği bir sayıyı veya sınırların dışından
+            // bir sayıyı girdiğinde de bir deneme hakkı gidecektir
+            deneme++;
+
+            // TODO: bunların teker fonksiyonla olması lazım mı?
+            int satir = (tahmin%10) ? tahmin/10+2 : tahmin/10+1 ;
+            int sutun = (tahmin%10) ? (tahmin % 10 - 1) * 5 + 1 : 46;
+
+            // TODO: hizalamadaki sorunların düzeltilmesi lazım
+            // tek haneli sayıları silmek için
+            cout << gotoxy(satir, sutun) << "     ";
+            // test yaparken aşağıdaki daha kolay anlaşılır
+            // cout << gotoxy(satir, sutun) << "-----";
 
 
-       // Her tahminden sonra deneme değişkenini arttırıyoruz
-       // deneme her halükarda artacaktır, bence böyle de olması gerekiyor
-       // kullanıcı daha önceden girdiği bir sayıyı veya sınırların dışından
-       // bir sayıyı girdiğinde de bir deneme hakkı gidecektir
-       deneme++;
+            // tahmin bilgisarın tuttuğu sayıdan düşükse ve sınır içindeyse
+            // sınırların içinde olup olmadığını kontrol ediyoruz çünkü
+            // bunu yapmazsak sınırların dışında bir sayı girildiğinde
+            // ekrandaki sayı renklendirme yamuluyor
+            if (tahmin < rasgeleSayi && tahmin > 0)
+                {
+                cout << gotoxy(satir, sutun) << setw(5) << "\33[33;1m   " + ToString(tahmin) + "\33[0m";
+                cout << gotoxy(5,60) << gettext("Your guess was so low.") << "     ";
+                }
 
-       // Yapılacak: bunların teker fonksiyonla olması lazım
-       int satir = (tahmin%10) ? tahmin/10+2 : tahmin/10+1 ;
-       int sutun = (tahmin%10) ? (tahmin % 10 - 1) * 5 + 1 : 46;
+            // tahmin bilgisarın tuttuğu sayıdan büyükse ve sınır içindeyse
+            else if (tahmin > rasgeleSayi && tahmin < (sinirNoktasi + 1))
+                {
+                cout << gotoxy(satir, sutun) << setw(5) << "\33[34;1m   " + ToString(tahmin) + "\33[0m";
+                cout << gotoxy(5,60) << gettext("Your guess was so high.") << "     ";
+                }
 
-       // Yapılacak: hizalamadaki sorunların düzeltilmesi lazım
-       // tek haneli sayıları silmek için
-       cout << gotoxy(satir, sutun) << "     ";
-       // test yaparken aşağıdaki daha kolay anlaşılır
-       //cout << gotoxy(satir, sutun) << "-----";
+            else if (tahmin > sinirNoktasi || tahmin < 0) // tahmin sınırların dışındaysa
+                {
+                cout << gotoxy(5,60) << gettext("1 and ") << sinirNoktasi << gettext(" are frontier.") << "     ";
+                }
 
+            else if (tahmin == rasgeleSayi) // tahmin doğruysa
+                {
+                cout << gotoxy(satir, sutun) << setw(5) << "\33[32;1m   " + ToString(tahmin) + "\33[0m";
+                cout << gotoxy(16,15)
+                     << gettext("You won! You found the number in ")
+                     << deneme
+                     << gettext(" trys. Now next level.")
+                     << endl;
 
-       // tahmin bilgisarın tuttuğu sayıdan düşükse ve sınır içindeyse
-       // sınırların içinde olup olmadığını kontrol ediyoruz çünkü
-       // bunu yapmazsak sınırların dışında bir sayı girildiğinde
-       // ekrandaki sayı renklendirme yamuluyor
-       if (tahmin < rasgeleSayi && tahmin > 0)
-           {
-           cout << gotoxy(satir, sutun) << setw(5) << "\33[33;1m   " + ToString(tahmin) + "\33[0m" << endl;
-           cout << gotoxy(5,60) << "Tahmininiz çok düşüktü.";
-           }
+                sleep(3);
+                }
 
-       // tahmin bilgisarın tuttuğu sayıdan büyükse ve sınır içindeyse
-       else if (tahmin > rasgeleSayi && tahmin < (sinirNoktasi + 1))
-           {
-           cout << gotoxy(satir, sutun) << setw(5) << "\33[34;1m   " + ToString(tahmin) + "\33[0m" << endl;
-           cout << gotoxy(5,60) << "Tahmininiz çok yüksekti.";
-           }
+           if (tahmin != rasgeleSayi && deneme == denemeHakki)
+                {
+                can--;
 
-       else if (tahmin > sinirNoktasi || tahmin < 0) // tahmin sınırların dışındaysa
-           {
-           cout << gotoxy(5,60) << "1 ve " << sinirNoktasi << " sınırdır :)";
-           }
+                cout << gotoxy(16,15)
+                     << gettext("Not good, try again.")
+                     << endl;
+                cout << gotoxy(17,15)
+                     << gettext("By the way the number was: ")
+                     << rasgeleSayi
+                     << endl;
 
-       else if (tahmin == rasgeleSayi) // tahmin doğruysa
-           {
-           cout << gotoxy(satir, sutun) << setw(5) << "\33[32;1m   " + ToString(tahmin) + "\33[0m" << endl;
-           cout << gotoxy(16,15)
-                << "Kazandınız! Sayıyı "
-                << deneme
-                << " denemede tahmin ettiniz."
-                << endl;
-           }
+                sleep(3);
+                }
 
-       if (tahmin != rasgeleSayi && deneme == denemeHakki)
-           {
-           cout << gotoxy(16,15)
-                << "Kaybettiniz, önemli olan oynamaktı ama. Bu arada sayı şuydu: "
-                << rasgeleSayi
-                << endl;
-           }
-       } while (tahmin != rasgeleSayi && deneme != denemeHakki);
+            // önceki girilen sayıyı ekrandan temizlemek için
+            // kullanıcın on basamaklı bir sayı girmeyi de
+            // deneyebileceğini düşünerek biraz büyük alalım :)
+            cout << gotoxy(16,0) << "          ";
+            // bu son değişikliklerden sonra aşağı inmek zorunda kaldı
+            // TODO: kullanıcının üç hanelilerden fazla girmemesini otomatikleştir
+            } while (tahmin != rasgeleSayi && deneme != denemeHakki);
 
-    cout << gotoxy(4,60) << "Kalan hakkınız: " << denemeHakki - deneme; // bunu iki kere kullandık ama
-    cin;
-    return 0;
+        // Zaman aşımını her bölüm için üç saniye düşürelim
+        // Üç saniyeden sonrasına geçmemesini de sağlayalım
+        if (beklemeSuresi > 3)
+            beklemeSuresi--;
+
+        // 100 puandan sonra her bölüm için ve ilk denemede bilinmesine bir can şirketten
+        if (puan >= 100 || deneme==1)
+            can++;
+
+        puan = puan + (denemeHakki - deneme) * 3;
+        deneme = 0;
+
+        cout << endl;
+        sayilariyaz();
+
+        if (can == -1)
+            {
+            cout << gotoxy(16,15)
+                 << gettext("You lost! It's not the end of world. By the way the number was: ")
+                 << rasgeleSayi
+                 << endl;
+            }
+
+        } while (can >= 0);
     }
 
 
 int main()
     {
+    // Yerelleştirmeyle (gettext) ilgili şeyler
+    setlocale(LC_ALL, "");
+    bindtextdomain("sayi-tahmin", ".");
+    textdomain( "sayi-tahmin");
+
+    // Kullanıcıya yeniden oynamak isteyip istemediğini...
     char cevap;
-    do
-        {
+
+    do  {
         cevap = 'h';
 
         sayilariyaz();
 
         oynat();
 
-        cout << gotoxy(5,7) << "                                        ";
-        cout << gotoxy(6,7) << "     Tekrar oynamak ister misiniz ?     ";
-        cout << gotoxy(7,7) << "                 (e/h)                  ";
-        cout << gotoxy(8,7) << "                                        ";
+        cout << gotoxy(6,17) << gettext("     Play again?     ");
+        cout << gotoxy(7,17) << gettext("        (y/n)        ");
 
         cin >> cevap;
-        } while (cevap=='e');
+        } while (cevap=='e' || cevap=='y');
 
     system("clear");
     return 0;

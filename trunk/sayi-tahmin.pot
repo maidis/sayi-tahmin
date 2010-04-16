@@ -1,0 +1,81 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: sayi-tahmin 0.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-04-16 14:13+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: sayi-tahmin.cpp:73
+msgid "Number Guess Game"
+msgstr ""
+
+#: sayi-tahmin.cpp:109
+msgid "Score          : "
+msgstr ""
+
+#: sayi-tahmin.cpp:110
+msgid "Remaining lives: "
+msgstr ""
+
+#: sayi-tahmin.cpp:111
+msgid "Remaining trys : "
+msgstr ""
+
+#: sayi-tahmin.cpp:113
+msgid "What's your guess (1-"
+msgstr ""
+
+#: sayi-tahmin.cpp:160
+msgid "Your guess was so low."
+msgstr ""
+
+#: sayi-tahmin.cpp:167
+msgid "Your guess was so high."
+msgstr ""
+
+#: sayi-tahmin.cpp:172
+msgid "1 and "
+msgstr ""
+
+#: sayi-tahmin.cpp:172
+msgid " are frontier."
+msgstr ""
+
+#: sayi-tahmin.cpp:179
+msgid "You won! You found the number in "
+msgstr ""
+
+#: sayi-tahmin.cpp:181
+msgid " trys. Now next level."
+msgstr ""
+
+#: sayi-tahmin.cpp:192
+msgid "Not good, try again."
+msgstr ""
+
+#: sayi-tahmin.cpp:195
+msgid "By the way the number was: "
+msgstr ""
+
+#: sayi-tahmin.cpp:228
+msgid "You lost! It's not the end of world. By the way the number was: "
+msgstr ""
+
+#: sayi-tahmin.cpp:254
+msgid "     Play again?     "
+msgstr ""
+
+#: sayi-tahmin.cpp:255
+msgid "        (y/n)        "
+msgstr ""
