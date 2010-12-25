@@ -1,5 +1,6 @@
 #labels türkçe
 =sayi-tahmin=
+GNU/Linux için C++ ile yazılmış konsol tabanlı basit bir sayı tahmin oyunu
 
 ==Nedir==
 sayi-tahmin, daha önceden [http://www.qbasic.com QBasic]'te yazdığım sayı tahmin oyununun C++'laşmış halidir.
