@@ -238,7 +238,7 @@ int main()
     {
     // Yerelleştirmeyle (gettext) ilgili şeyler
     setlocale(LC_ALL, "");
-    bindtextdomain("sayi-tahmin", ".");
+    bindtextdomain("sayi-tahmin", "/usr/share/locale");
     textdomain( "sayi-tahmin");
 
     // Kullanıcıya yeniden oynamak isteyip istemediğini...
