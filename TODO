@@ -4,12 +4,12 @@ Yapılacaklar
 
 Genel
 ------
-- Çift dil desteği: TR - EN
-- Süreye bağlı hak gitmesi
-- İnşa, kurulum
+- Bazı sayılarda güç nesneleri çıkması: can, deneme hakkı, ek puan, süre
+- Bazı sayılarda sürpriz alt oyunlara gidilmesi, bir kelime bir işlem, çarkıfelek vs.
+- Konsolda fareyle oynayabilme?
 - Bilgisayara karşı oynama
 - Ağ üzerinden rakibe karşı oynama
 - Yüksek puanların saklanması
 - Yüksek puanların ağ üzerinde saklanması
-
-
+- SFML portu
+- Grafik tabanlı bir sürüm
