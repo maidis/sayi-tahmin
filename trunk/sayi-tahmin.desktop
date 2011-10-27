@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=sayi-tahmin
+GenericName=Number Guess Game
+GenericName[tr]=Sayı Tahmin Oyunu
+Comment=A number guess game
+Comment[tr]=Bir sayı tahmin oyunu
+Icon=sayi-tahmin
+Exec=konsole --noclose -e sayi-tahmin
+Terminal=false
+StartupNotify=false
+Categories=Application;Game;LogicGame;
