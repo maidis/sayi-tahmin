@@ -6,72 +6,77 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-04 23:38+0300\n"
+"POT-Creation-Date: 2010-04-16 14:13+0300\n"
 "PO-Revision-Date: 2010-04-04 23:39+0300\n"
 "Last-Translator: Anıl Özbek <ozbekanil@gmail.com>\n"
 "Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: sayi-tahmin.cpp:247
+#: sayi-tahmin.cpp:255
 msgid "        (y/n)        "
 msgstr "            (e/h)              "
 
-#: sayi-tahmin.cpp:246
+#: sayi-tahmin.cpp:254
 msgid "     Play again?     "
 msgstr "     Oynamak ister misiniz?     "
 
-#: sayi-tahmin.cpp:171
+#: sayi-tahmin.cpp:172
 msgid " are frontier."
 msgstr " sınırdır."
 
-#: sayi-tahmin.cpp:180
+#: sayi-tahmin.cpp:181
 msgid " trys. Now next level."
 msgstr " denemede tahmin ettiniz. Şimdi sıradaki bölüm."
 
-#: sayi-tahmin.cpp:171
+#: sayi-tahmin.cpp:172
 msgid "1 and "
 msgstr "1 ve "
 
-#: sayi-tahmin.cpp:191
+#: sayi-tahmin.cpp:195
+msgid "By the way the number was: "
+msgstr "Bu arada sayı şuydu: "
+
+#: sayi-tahmin.cpp:192
 msgid "Not good, try again."
 msgstr "İyi olmadı, tekrar deneyin."
 
-#: sayi-tahmin.cpp:74
+#: sayi-tahmin.cpp:73
 msgid "Number Guess Game"
 msgstr "Sayı Tahmin Oyunu"
 
-#: sayi-tahmin.cpp:112
+#: sayi-tahmin.cpp:110
 msgid "Remaining lives: "
 msgstr "Kalan canlar   : "
 
-#: sayi-tahmin.cpp:113
+#: sayi-tahmin.cpp:111
 msgid "Remaining trys : "
 msgstr "Kalan denemeler: "
 
-#: sayi-tahmin.cpp:111
+#: sayi-tahmin.cpp:109
 msgid "Score          : "
 msgstr "Puan           : "
 
-#: sayi-tahmin.cpp:115
+#: sayi-tahmin.cpp:113
 msgid "What's your guess (1-"
 msgstr "Tahmininiz nedir (1-"
 
-#: sayi-tahmin.cpp:217
+#: sayi-tahmin.cpp:228
 msgid "You lost! It's not the end of world. By the way the number was: "
 msgstr "Kaybettiniz. Ama fazla önemli olmasa gerek. Bu arada sayı şuydu: "
 
-#: sayi-tahmin.cpp:178
+#: sayi-tahmin.cpp:179
 msgid "You won! You found the number in "
 msgstr "Kazandınız! Sayıyı "
 
-#: sayi-tahmin.cpp:166
+#: sayi-tahmin.cpp:167
 msgid "Your guess was so high."
 msgstr "Tahmininiz çok yüksekti"
 
-#: sayi-tahmin.cpp:159
+#: sayi-tahmin.cpp:160
 msgid "Your guess was so low."
 msgstr "Tahmininiz çok düşüktü."

@@ -41,7 +41,7 @@
 #include <locale.h>
 // Zaman sınırlamalı kullanıcı giriş hedesi için bir başlık daha ekleyelim
 #include <sys/time.h>
-
+#include <unistd.h>
 // İsim uzayımızı belirtiyoruz std'den başka bir şey kullanmadığımız için
 // herhangi bir karışıklık olmayacaktır, ama yakında düzeltmemiz gerekebilir
 using namespace std;
@@ -65,7 +65,8 @@ void sayilariyaz()
     {
     int i;
 
-    system("clear");
+    //system("clear");
+    cout << "\x1B[2J\x1B[H";
     // Ya ben hiçbir ek şey kullanmak istemediğimden ncurses kullanmadım
     // fakat sen gel gör ki clear komutu ncurses paketinden çıkıyormuş
 
@@ -257,6 +258,7 @@ int main()
         cin >> cevap;
         } while (cevap=='e' || cevap=='y');
 
-    system("clear");
+    //system("clear");
+    cout << "\x1B[2J\x1B[H";
     return 0;
     }
