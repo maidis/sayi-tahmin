@@ -10,8 +10,6 @@ sayi-tahmin artık aktif olarak geliştirilmemektedir. Bitirdiğim zaman [bir SF
 
 sayi-tahmin is no longer being actively developed. When I'm done I'll publish [a SFML version](https://www.youtube.com/watch?v=tQIvv_vkVSk).
 
-sayi-tahmin is a number guess game. I had written previously it with [QBasic](http://www.qbasic.com) and this is a [C++](http://en.wikipedia.org/wiki/C%2B%2B)'ized version of it.
-
 ## Nasıl görünüyor // How it looks
 Neredeyse tam istediğim gibi, tamamladığımda bu oyunu yapma amacım olan görüntüye kavuşacağını düşünüyorum.
 
