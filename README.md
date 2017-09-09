@@ -39,7 +39,4 @@ Valla ben olsam hiç uğraşmam bu kadar zahmete. Ama bu oyunu oynamazsam gözle
 ![http://i.imgur.com/qI1kE.png](http://i.imgur.com/qI1kE.png)
 
 ## Diğer sayı tahmin oyunları // Other number guessing games
-  * [SourceForge](http://sourceforge.net/search/?type_of_search=soft&words=%22number+guess%22)
-  * [Google Code](http://code.google.com/hosting/search?q=number+guess+game&projectsearch=Search+projects)
   * [GitHub](https://github.com/search?q=number+guess+game&type=Everything&repo=&langOverride=&start_value=1)
-  * [Gitorious](http://gitorious.org/search?q=number+guess+game&commit=Search)
