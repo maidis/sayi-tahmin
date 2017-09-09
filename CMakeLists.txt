@@ -42,7 +42,7 @@ install(TARGETS sayi-tahmin RUNTIME DESTINATION bin)
 if("${CMAKE_SYSTEM_NAME}" MATCHES "Linux") 
         install(FILES sayi-tahmin.desktop DESTINATION share/applications/)
         install(FILES sayi-tahmin.png DESTINATION share/pixmaps/)
-        install(FILES COPYING README TODO DESTINATION share/doc/sayi-tahmin/)
+        install(FILES COPYING README.md TODO DESTINATION share/doc/sayi-tahmin/)
 endif("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
 
 # http://stackoverflow.com/questions/2694742/is-there-a-cmake-function-to-update-pot-files
