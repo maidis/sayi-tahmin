@@ -1,7 +1,14 @@
 # sayi-tahmin
 
 ## Nedir // WTF
-sayi-tahmin, daha önceden [QBasic](http://www.eksisozluk.com/show.asp?t=qbasic)'te yazdığım sayı tahmin oyununun [C++](http://tr.wikipedia.org/wiki/C%2B%2B)'laşmış halidir.
+**sayi-tahmin**, daha önceden [QBasic](http://www.eksisozluk.com/show.asp?t=qbasic)'te yazdığım sayı tahmin oyununun [C++](http://tr.wikipedia.org/wiki/C%2B%2B)'laşmış halidir.
+
+**sayi-tahmin** is a number guess game. I had written previously it with [QBasic](http://www.qbasic.com) and this is a [C++](http://en.wikipedia.org/wiki/C%2B%2B)'ized version of it.
+
+## NOT // NOTE
+sayi-tahmin artık aktif olarak geliştirilmemektedir. Bitirdiğim zaman [bir SFML sürümünü](https://www.youtube.com/watch?v=tQIvv_vkVSk) yayımlayacağım.
+
+sayi-tahmin is no longer being actively developed. When I'm done I'll publish [a SFML version](https://www.youtube.com/watch?v=tQIvv_vkVSk).
 
 sayi-tahmin is a number guess game. I had written previously it with [QBasic](http://www.qbasic.com) and this is a [C++](http://en.wikipedia.org/wiki/C%2B%2B)'ized version of it.
 
